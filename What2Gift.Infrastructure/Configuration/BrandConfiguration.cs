@@ -24,5 +24,33 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
             .WithOne(gs => gs.Brand)
             .HasForeignKey(gs => gs.BrandId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasData(
+            new Brand
+            {
+                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                Name = "Handmade Corner",
+                Description = "Local handmade crafts and souvenirs"
+            },
+            new Brand
+            {
+                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                Name = "Bloom & Co",
+                Description = "Fresh flowers and dried bouquets"
+            },
+            new Brand
+            {
+                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                Name = "Sweet Delights",
+                Description = "Cakes, cookies, and sweet gift sets"
+            },
+            new Brand
+            {
+                Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                Name = "Giftopia",
+                Description = "Personalized gifts and accessories"
+            }
+        );
+
     }
 }

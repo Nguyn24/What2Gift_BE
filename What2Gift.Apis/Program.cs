@@ -16,7 +16,7 @@ public class Program
         builder.Configuration.AddEnvironmentVariables();
         
         builder.Services.AddSwaggerGenWithAuth(); 
-
+        
         builder.Services
             .AddApplication()
             .AddPresentation()

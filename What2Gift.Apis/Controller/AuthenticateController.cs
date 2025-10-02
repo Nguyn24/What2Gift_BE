@@ -5,6 +5,7 @@ using What2Gift.Apis.Extensions;
 using What2Gift.Apis.Requests;
 using What2Gift.Application.Authentication.ChangePassword;
 using What2Gift.Application.Authentication.Login;
+using What2Gift.Application.Authentication.Login.LoginWithGoogle;
 using What2Gift.Application.Authentication.Register;
 using What2Gift.Application.Authentication.VerifyUser;
 
@@ -13,7 +14,7 @@ using What2Gift.Application.Authentication.VerifyUser;
 namespace What2Gift.Apis.Controller;
 
 
-[Route("api/auth")]
+[Route("api/auth/")]
 [ApiController]
 public class AuthenticateController : ControllerBase
 {
@@ -25,7 +26,7 @@ public class AuthenticateController : ControllerBase
     }
     
     
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<IResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         LoginCommand command = new LoginCommand
@@ -38,7 +39,7 @@ public class AuthenticateController : ControllerBase
         return result.MatchOk();
     }
     
-    [HttpPost("/loginWithRefreshToken")]
+    [HttpPost("loginWithRefreshToken")]
     public async Task<IResult> LoginWithRefreshToken([FromBody] string refreshToken, CancellationToken cancellationToken)
     {
         LoginWithRefreshToken.LoginByRefreshTokenCommand command = new LoginWithRefreshToken.LoginByRefreshTokenCommand
@@ -50,7 +51,7 @@ public class AuthenticateController : ControllerBase
         return result.MatchOk();
     }
     
-    [HttpPost("/register")]
+    [HttpPost("register")]
     public async Task<IResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         RegisterCommand command = new RegisterCommand
@@ -65,7 +66,7 @@ public class AuthenticateController : ControllerBase
     }
     
     [Authorize]
-    [HttpPut("/change-password")]
+    [HttpPut("change-password")]
     public async Task<IResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
     {
         var command = new ChangePasswordCommand
@@ -79,7 +80,7 @@ public class AuthenticateController : ControllerBase
         return result.MatchOk();
     }
     
-    [HttpPut("/verify")]
+    [HttpPut("verify")]
     public async Task<IResult> VerifyUser([FromBody] VerifyUserRequest request, CancellationToken cancellationToken)
     {
         var command = new VerifyUserCommand(request.Token);
@@ -99,16 +100,16 @@ public class AuthenticateController : ControllerBase
     //     return result.MatchOk();
     // }
 
-    // [HttpPost("auth/loginWithGoogle")]
-    // public async Task<IResult> LoginWithGoogle([FromBody] LoginWithGoogleRequest request, CancellationToken cancellationToken)
-    // {
-    //     var command = new LoginWithGoogleCommand()
-    //     {
-    //         IdToken = request.IdToken
-    //     };
-    //
-    //     var result = await _mediator.Send(command, cancellationToken);
-    //     return result.MatchOk();
-    // }
+    [HttpPost("loginWithGoogle")]
+    public async Task<IResult> LoginWithGoogle([FromBody] LoginWithGoogleRequest request, CancellationToken cancellationToken)
+    {
+        var command = new LoginWithGoogleCommand()
+        {
+            IdToken = request.IdToken
+        };
+    
+        var result = await _mediator.Send(command, cancellationToken);
+        return result.MatchOk();
+    }
 
 }

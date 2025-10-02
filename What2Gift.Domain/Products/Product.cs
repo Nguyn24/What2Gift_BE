@@ -10,6 +10,7 @@ public class Product : Entity
     public Guid? OccasionId { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public string? ImageUrl { get; set; }
 
     public Brand Brand { get; set; } = null!;
     public Category Category { get; set; } = null!;

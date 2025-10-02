@@ -15,6 +15,7 @@ public class User : Entity
     public UserStatus Status { get; set; } 
     public bool IsVerified { get; set; }
     public MembershipStatus MembershipStatus { get; set; }
+    public string? AvatarUrl { get; set; }
     public Membership? Membership { get; set; }
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<GiftSuggestion> GiftSuggestions { get; set; } = new List<GiftSuggestion>();

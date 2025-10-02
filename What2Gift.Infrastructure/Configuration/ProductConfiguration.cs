@@ -20,6 +20,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Description)
             .HasMaxLength(1000);
 
+        builder.Property(p => p.ImageUrl)
+            .HasMaxLength(1000);
+
         builder.HasOne(p => p.Brand)
             .WithMany(b => b.Products)
             .HasForeignKey(p => p.BrandId)

@@ -27,6 +27,7 @@ namespace What2Gift.Application.Users.GetCurrentUser
                 Role = user.Role.ToString(),
                 Status = user.Status,
                 MembershipStatus = user.MembershipStatus,
+                AvatarUrl = user.AvatarUrl,
                 Membership = user.Membership == null ? null : new Membership
                 {
                     MembershipType = user.Membership.MembershipType,

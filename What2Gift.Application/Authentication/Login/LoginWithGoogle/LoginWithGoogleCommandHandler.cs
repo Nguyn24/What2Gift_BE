@@ -41,17 +41,17 @@ public sealed class LoginWithGoogleCommandHandler(
 
         if (user is null)
         {
-            // Tạo user mới
             user = new User
             {
                 Id = Guid.NewGuid(),
                 Email = email,
                 Username = googlePayload.Name ?? email,
-                Role = UserRole.Member, // hoặc role mặc định
+                Role = UserRole.Member,
                 Status = UserStatus.Active,
-                // Nếu có các trường bắt buộc khác, set mặc định hoặc null
-                Password = null, // hoặc tạo password ngẫu nhiên nếu cần
+                Password = null,
                 IsVerified = true,
+                MembershipStatus = MembershipStatus.Inactive,
+                AvatarUrl = googlePayload.Picture,
                 RefreshTokens = new List<RefreshToken>()
             };
 

@@ -15,7 +15,7 @@ using What2Gift.Domain.Common;
 
 namespace What2Gift.Apis.Controller;
 
-[Route("api/user")]
+[Route("api/user/")]
 [ApiController]
 public class UserController : ControllerBase
 {
@@ -27,11 +27,10 @@ public class UserController : ControllerBase
     {
         _mediator = mediator;
         _imageUploader = imageUploader;
-
     }
     
     // [Authorize(Roles = "Staff")]
-    [HttpPost("/create-user")]
+    [HttpPost("create-user")]
     public async Task<IResult> CreateUser([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
         CreateUserCommand command = new CreateUserCommand
@@ -43,11 +42,11 @@ public class UserController : ControllerBase
         };
         
         Result<CreateUserCommandResponse> result = await _mediator.Send(command, cancellationToken);
-        return result.MatchCreated(id => $"/user/{id}");
+        return result.MatchOk();
     }
     
     // [Authorize(Roles = "Staff")]
-    [HttpGet("/get-all-users")]
+    [HttpGet("get-all-users")]
     public async Task<IResult> GetUsers([FromQuery] int pageNumber, [FromQuery] int pageSize, CancellationToken cancellation)
     {
         Result<Page<GetUsersResponse>> result = await _mediator.Send(new GetUsersQuery
@@ -59,21 +58,14 @@ public class UserController : ControllerBase
     }
     
     [Authorize]
-    [HttpPut("/update-current-user")]
+    [HttpPut("update-current-user")]
     public async Task<IResult> UpdateMyProfile([FromBody] UpdateCurrentUserRequest request, CancellationToken cancellationToken)
     {
-        // string? imageUrl = null;
-        // if (request.Image != null)
-        // {
-        //     using var stream = request.Image.OpenReadStream();
-        //     imageUrl = await _imageUploader.UploadImageAsync(stream, request.Image.FileName, "avatars");
-        // }
-        //
         var command = new UpdateCurrentUserCommand()
         {
              FullName = request.FullName,
              Email = request.Email,
-          
+             AvatarUrl = request.Image
         };
         
         var result = await _mediator.Send(command, cancellationToken);
@@ -82,7 +74,7 @@ public class UserController : ControllerBase
     
     
     [Authorize(Roles = "Staff")]
-    [HttpPut("/update-user")]
+    [HttpPut("update-user")]
     public async Task<IResult> UpdateByStaff( [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateUserCommand
@@ -99,7 +91,7 @@ public class UserController : ControllerBase
     }
     
     [Authorize]
-    [HttpGet("/get-current-users")]
+    [HttpGet("get-current-users")]
     public async Task<IResult> GetCurrentUsers( CancellationToken cancellation)
     {
         var query = new GetCurrentUserQuery();

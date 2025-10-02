@@ -11,6 +11,7 @@ public sealed class GetUsersResponse
     public MembershipStatus MembershipStatus { get; set; }
     public UserStatus Status { get; set; }
     public Membership? Membership { get; set; }
+    public string? AvatarUrl { get; set; }
 
 }
 public class Membership

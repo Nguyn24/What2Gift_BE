@@ -29,6 +29,7 @@ public sealed class GetUsersQueryHandler(IDbContext context)
                 Role = u.Role,
                 Status = u.Status,
                 MembershipStatus = u.MembershipStatus,
+                AvatarUrl = u.AvatarUrl,
                 Membership = u.Membership == null ? null : new Membership
                 {
                     MembershipType = u.Membership.MembershipType,

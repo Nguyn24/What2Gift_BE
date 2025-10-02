@@ -27,6 +27,7 @@ public sealed class UpdateCurrentUserCommandHandler(
 
         user.Username = request.FullName ?? user.Username;
         user.Email = request.Email ?? user.Email;
+        user.AvatarUrl = request.AvatarUrl ?? user.AvatarUrl;
         
         await context.SaveChangesAsync(cancellationToken);
 

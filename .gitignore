@@ -8,5 +8,13 @@ obj/
 *.log
 *.sln.docstates
 
+/wwwroot/Products/*
+/wwwroot/Avatars/*
+
+!/wwwroot/Products/
+!/wwwroot/Avatars/
+
+
+
 
 

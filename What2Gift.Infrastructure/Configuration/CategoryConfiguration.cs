@@ -24,5 +24,33 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .WithOne(gs => gs.Category)
             .HasForeignKey(gs => gs.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasData(
+            new Category
+            {
+                Id = Guid.Parse("aaaa1111-1111-1111-1111-111111111111"),
+                Name = "Flowers",
+                Description = "Fresh flowers, dried flowers, bouquet arrangements"
+            },
+            new Category
+            {
+                Id = Guid.Parse("bbbb2222-2222-2222-2222-222222222222"),
+                Name = "Handmade Crafts",
+                Description = "Handmade gifts, souvenirs, and DIY sets"
+            },
+            new Category
+            {
+                Id = Guid.Parse("cccc3333-3333-3333-3333-333333333333"),
+                Name = "Food & Sweets",
+                Description = "Cakes, chocolates, candy gift boxes"
+            },
+            new Category
+            {
+                Id = Guid.Parse("dddd4444-4444-4444-4444-444444444444"),
+                Name = "Accessories",
+                Description = "Jewelry, watches, and small fashion gifts"
+            }
+        );
+
     }
 }

@@ -44,7 +44,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired();
             
             builder.Property(x => x.IsVerified).IsRequired().HasDefaultValue(false);
-           
+
+            builder.Property(x => x.AvatarUrl).HasMaxLength(1000);
+            
             builder.HasOne(u => u.Membership)          
                 .WithOne(m => m.User)              
                 .HasForeignKey<Membership>(m => m.UserId) 

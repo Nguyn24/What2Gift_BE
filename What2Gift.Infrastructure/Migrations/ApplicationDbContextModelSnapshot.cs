@@ -172,6 +172,32 @@ namespace What2Gift.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Description = "Local handmade crafts and souvenirs",
+                            Name = "Handmade Corner"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Description = "Fresh flowers and dried bouquets",
+                            Name = "Bloom & Co"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Description = "Cakes, cookies, and sweet gift sets",
+                            Name = "Sweet Delights"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            Description = "Personalized gifts and accessories",
+                            Name = "Giftopia"
+                        });
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.Category", b =>
@@ -192,6 +218,32 @@ namespace What2Gift.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaa1111-1111-1111-1111-111111111111"),
+                            Description = "Fresh flowers, dried flowers, bouquet arrangements",
+                            Name = "Flowers"
+                        },
+                        new
+                        {
+                            Id = new Guid("bbbb2222-2222-2222-2222-222222222222"),
+                            Description = "Handmade gifts, souvenirs, and DIY sets",
+                            Name = "Handmade Crafts"
+                        },
+                        new
+                        {
+                            Id = new Guid("cccc3333-3333-3333-3333-333333333333"),
+                            Description = "Cakes, chocolates, candy gift boxes",
+                            Name = "Food & Sweets"
+                        },
+                        new
+                        {
+                            Id = new Guid("dddd4444-4444-4444-4444-444444444444"),
+                            Description = "Jewelry, watches, and small fashion gifts",
+                            Name = "Accessories"
+                        });
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.GiftSuggestion", b =>
@@ -246,24 +298,72 @@ namespace What2Gift.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("DateRangeEnd")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("DateRangeStart")
-                        .HasColumnType("date");
-
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("EndDay")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EndMonth")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<int>("StartDay")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StartMonth")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Occasions", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("99999999-1111-1111-1111-111111111111"),
+                            Description = "Perfect gifts for birthdays",
+                            EndDay = 31,
+                            EndMonth = 12,
+                            Name = "Birthday",
+                            StartDay = 1,
+                            StartMonth = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("88888888-2222-2222-2222-222222222222"),
+                            Description = "Warm gifts for Christmas holidays",
+                            EndDay = 31,
+                            EndMonth = 12,
+                            Name = "Christmas",
+                            StartDay = 20,
+                            StartMonth = 12
+                        },
+                        new
+                        {
+                            Id = new Guid("77777777-3333-3333-3333-333333333333"),
+                            Description = "Romantic gifts for Valentine's Day",
+                            EndDay = 14,
+                            EndMonth = 2,
+                            Name = "Valentine",
+                            StartDay = 14,
+                            StartMonth = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("66666666-4444-4444-4444-444444444444"),
+                            Description = "Special gifts to celebrate moms",
+                            EndDay = 12,
+                            EndMonth = 5,
+                            Name = "Mother's Day",
+                            StartDay = 10,
+                            StartMonth = 5
+                        });
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.Product", b =>
@@ -279,6 +379,10 @@ namespace What2Gift.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("ImageUrl")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
@@ -449,6 +553,10 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
