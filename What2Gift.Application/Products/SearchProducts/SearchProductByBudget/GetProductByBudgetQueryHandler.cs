@@ -5,16 +5,16 @@ using What2Gift.Application.Abstraction.Query;
 using What2Gift.Application.Products.GetAllProduct;
 using What2Gift.Domain.Common;
 
-namespace What2Gift.Application.Products.SearchProductByCategory;
+namespace What2Gift.Application.Products.SearchProducts.SearchProductByBudget;
 
-public class GetProductByCategoryQueryHandler(IDbContext context)
-    : IQueryHandler<GetProductByCategoryQuery, Page<GetProductResponse>>
+public class GetProductByBudgetQueryHandler(IDbContext context)
+    : IQueryHandler<GetProductByBudgetQuery, Page<GetProductResponse>>
 {
-    public async Task<Result<Page<GetProductResponse>>> Handle(GetProductByCategoryQuery request, CancellationToken cancellationToken)
+    public async Task<Result<Page<GetProductResponse>>> Handle(GetProductByBudgetQuery request, CancellationToken cancellationToken)
     {
         var query = context.Products
             .Include(s=>s.ProductSources)
-            .Where(p => p.CategoryId == request.CategoryId);
+            .Where(p => p.ProductSources.Any(ps => ps.Price >= request.MinPrice && ps.Price <= request.MaxPrice));
         var totalCount = await query.CountAsync(cancellationToken);
         
         var result = await query

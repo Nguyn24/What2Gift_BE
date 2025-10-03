@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <Folder Include="Authentication\" />
+      <Folder Include="Products\SearchProducts\" />
       <Folder Include="Users\" />
     </ItemGroup>
 

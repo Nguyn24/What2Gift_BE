@@ -5,7 +5,7 @@ using What2Gift.Application.Abstraction.Query;
 using What2Gift.Application.Products.GetAllProduct;
 using What2Gift.Domain.Common;
 
-namespace What2Gift.Application.Products.SearchProductByOccasion;
+namespace What2Gift.Application.Products.SearchProducts.SearchProductByOccasion;
 
 public class GetProductByOccasionQueryHandler(IDbContext context)
     : IQueryHandler<GetProductByOccasionQuery, Page<GetProductResponse>>

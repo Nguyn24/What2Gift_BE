@@ -450,15 +450,10 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("SuggestionId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SuggestionId");
 
                     b.HasIndex("UserId");
 
@@ -694,19 +689,11 @@ namespace What2Gift.Infrastructure.Migrations
 
             modelBuilder.Entity("What2Gift.Domain.Users.Feedback", b =>
                 {
-                    b.HasOne("What2Gift.Domain.Products.GiftSuggestion", "Suggestion")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("SuggestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("What2Gift.Domain.Users.User", "User")
                         .WithMany("Feedbacks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Suggestion");
 
                     b.Navigation("User");
                 });
@@ -757,11 +744,6 @@ namespace What2Gift.Infrastructure.Migrations
             modelBuilder.Entity("What2Gift.Domain.Products.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("What2Gift.Domain.Products.GiftSuggestion", b =>
-                {
-                    b.Navigation("Feedbacks");
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.Occasion", b =>
