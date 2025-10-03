@@ -16,7 +16,7 @@ public static class DependencyInjection
         services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalAndProdFE", policy =>
-                policy.WithOrigins("http://localhost:3000")
+                policy.WithOrigins("http://localhost:5173")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
