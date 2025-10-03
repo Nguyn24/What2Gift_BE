@@ -39,7 +39,7 @@ public class AuthenticateController : ControllerBase
         return result.MatchOk();
     }
     
-    [HttpPost("loginWithRefreshToken")]
+    [HttpPost("refresh-token")]
     public async Task<IResult> LoginWithRefreshToken([FromBody] string refreshToken, CancellationToken cancellationToken)
     {
         LoginWithRefreshToken.LoginByRefreshTokenCommand command = new LoginWithRefreshToken.LoginByRefreshTokenCommand
@@ -100,7 +100,7 @@ public class AuthenticateController : ControllerBase
     //     return result.MatchOk();
     // }
 
-    [HttpPost("loginWithGoogle")]
+    [HttpPost("login-With-Google")]
     public async Task<IResult> LoginWithGoogle([FromBody] LoginWithGoogleRequest request, CancellationToken cancellationToken)
     {
         var command = new LoginWithGoogleCommand()
