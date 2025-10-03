@@ -52,7 +52,7 @@ public class ProductController : ControllerBase
         };
 
         Result result = await _mediator.Send(command, cancellationToken);
-        return Results.Ok(result);
+        return result.MatchOk();;
     }
     
     // [Authorize(Roles = "Staff")]
@@ -136,6 +136,6 @@ public class ProductController : ControllerBase
         };
 
         Result result = await _mediator.Send(command, cancellationToken);
-        return Results.Ok(result);
+        return result.MatchOk();
     }
 }
