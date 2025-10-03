@@ -4,11 +4,12 @@ using What2Gift.Apis.Extensions;
 using What2Gift.Apis.Requests;
 using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Products.CreateProduct;
+using What2Gift.Application.Products.DeleteProduct;
 using What2Gift.Application.Products.GetAllProduct;
-using What2Gift.Application.Products.SearchProductByBrand;
-using What2Gift.Application.Products.SearchProductByBudget;
-using What2Gift.Application.Products.SearchProductByCategory;
-using What2Gift.Application.Products.SearchProductByOccasion;
+using What2Gift.Application.Products.SearchProducts.SearchProductByBrand;
+using What2Gift.Application.Products.SearchProducts.SearchProductByBudget;
+using What2Gift.Application.Products.SearchProducts.SearchProductByCategory;
+using What2Gift.Application.Products.SearchProducts.SearchProductByOccasion;
 using What2Gift.Application.Products.UpdateProduct;
 using What2Gift.Application.Users.GetAllUser;
 using What2Gift.Domain.Common;
@@ -133,6 +134,18 @@ public class ProductController : ControllerBase
             Description = request.Description,
             ImageUrl = request.Image, 
             ProductSources = request.ProductSources
+        };
+
+        Result result = await _mediator.Send(command, cancellationToken);
+        return result.MatchOk();
+    }
+    
+    [HttpDelete("delete-product")]
+    public async Task<IResult> DeleteProduct([FromBody] DeleteProductRequest request, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProductCommand
+        {
+            Id = request.ProductId
         };
 
         Result result = await _mediator.Send(command, cancellationToken);

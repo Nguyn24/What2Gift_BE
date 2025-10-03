@@ -3,11 +3,12 @@ using What2Gift.Application.Abstraction.Query;
 using What2Gift.Application.Products.GetAllProduct;
 using What2Gift.Domain.Common;
 
-namespace What2Gift.Application.Products.SearchProductByCategory;
+namespace What2Gift.Application.Products.SearchProducts.SearchProductByBudget;
 
-public class GetProductByCategoryQuery : IPageableQuery, IQuery<Page<GetProductResponse>>
+public class GetProductByBudgetQuery : IPageableQuery, IQuery<Page<GetProductResponse>>
 {
-    public Guid CategoryId { get; init; }
+    public decimal MinPrice { get; init; }
+    public decimal MaxPrice { get; init; }
     public int PageNumber { get; init; }
     public int PageSize { get; init; }
 }

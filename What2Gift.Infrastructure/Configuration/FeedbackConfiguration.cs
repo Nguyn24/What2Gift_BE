@@ -27,9 +27,6 @@ public class FeedbackConfiguration : IEntityTypeConfiguration<Feedback>
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(x => x.Suggestion)
-            .WithMany(x => x.Feedbacks)
-            .HasForeignKey(x => x.SuggestionId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 }

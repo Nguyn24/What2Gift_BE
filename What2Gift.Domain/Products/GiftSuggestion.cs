@@ -19,5 +19,4 @@ public class GiftSuggestion : Entity
     public User User { get; set; } = null!;
     public Occasion? Occasion { get; set; }
     public Product? SuggestedProduct { get; set; }
-    public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 }

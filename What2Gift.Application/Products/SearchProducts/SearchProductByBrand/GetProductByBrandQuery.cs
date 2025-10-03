@@ -3,11 +3,11 @@ using What2Gift.Application.Abstraction.Query;
 using What2Gift.Application.Products.GetAllProduct;
 using What2Gift.Domain.Common;
 
-namespace What2Gift.Application.Products.SearchProductByOccasion;
+namespace What2Gift.Application.Products.SearchProducts.SearchProductByBrand;
 
-public class GetProductByOccasionQuery : IPageableQuery, IQuery<Page<GetProductResponse>>
+public class GetProductByBrandQuery : IPageableQuery, IQuery<Page<GetProductResponse>>
 {
-    public Guid OccasionId { get; init; }
+    public Guid BrandId { get; init; }
     public int PageNumber { get; init; }
     public int PageSize { get; init; }
 }

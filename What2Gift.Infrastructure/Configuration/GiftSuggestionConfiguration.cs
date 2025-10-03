@@ -48,10 +48,6 @@ public class GiftSuggestionConfiguration : IEntityTypeConfiguration<GiftSuggesti
             .WithMany(p => p.GiftSuggestions)
             .HasForeignKey(gs => gs.SuggestedProductId)
             .OnDelete(DeleteBehavior.SetNull);
-
-        builder.HasMany(gs => gs.Feedbacks)
-            .WithOne(f => f.Suggestion)
-            .HasForeignKey(f => f.SuggestionId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 }
