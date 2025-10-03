@@ -38,4 +38,19 @@
       <ProjectReference Include="..\What2Gift.Infrastructure\What2Gift.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Avatars\.gitkeep" />
+      <_ContentIncludedByDefault Remove="wwwroot\Avatars\0c3fa8b1-07bf-4576-bcf7-469c01f67f64.JPG" />
+      <_ContentIncludedByDefault Remove="wwwroot\Avatars\76c96777-ca33-46fa-b42c-fce9f95c5292.JPG" />
+      <_ContentIncludedByDefault Remove="wwwroot\Avatars\f75c97f4-d441-4b74-bee9-8bed7ddabb4c.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\.gitkeep" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\347b6eb5-718a-4573-953a-448cb9c17e62.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\50cb88bc-df94-4066-9af1-38307c0a1588.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\602c8e7f-8222-4b43-bb47-3e4223d1cb90.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\6c4670d3-6195-49d9-847b-4b670818d4a8.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\8a3804f4-149b-4b84-bc10-0becad3523a1.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\9b11ce8f-4ac7-466a-b4fc-f5d8570f680e.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Products\ca7aa6f7-934b-4e48-b4f7-cfbd16f25441.jpg" />
+    </ItemGroup>
+
 </Project>
