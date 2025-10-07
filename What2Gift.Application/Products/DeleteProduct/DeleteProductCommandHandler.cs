@@ -17,7 +17,7 @@ public class DeleteProductCommandHandler(IDbContext context)
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
        
         if (product == null)
-            return Result.Failure<Guid>(ProductErrors.ProductNotFound);
+            return Result.Failure(ProductErrors.ProductNotFound);
         
         context.Products.Remove(product);
         await context.SaveChangesAsync(cancellationToken);

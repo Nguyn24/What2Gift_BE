@@ -4,9 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Abstraction.Data;
+using What2Gift.Application.Abstraction.AI;
+using What2Gift.Application.Abstraction.AIService.AI;
+using What2Gift.Application.Abstraction.Scraping;
 using What2Gift.Infrastructure.Authentication;
 using What2Gift.Infrastructure.Database;
 using What2Gift.Infrastructure.Services;
@@ -23,6 +27,7 @@ public static class DependencyInjection
             .AddHealthChecks(configuration)
             .AddClientUrl(configuration)            
             .AddMailService(configuration)
+            .AddAIServices(configuration)
             .AddAuthenticationInternal(configuration);
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -99,6 +104,37 @@ public static class DependencyInjection
         services.AddScoped<ITemplateRenderer, TemplateRenderer>();
         services.AddScoped<IImageUploader, ImageUploader>();
     
+        return services;
+    }
+
+    private static IServiceCollection AddAIServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Add HTTP clients for AI services
+        services.AddHttpClient<HuggingFaceEmbeddingService>();
+        services.AddHttpClient<HuggingFaceChatService>();
+        services.AddHttpClient<QdrantVectorDatabaseService>();
+       
+        
+        // Register AI services (using Hugging Face instead of Ollama)
+        services.AddScoped<IAiEmbeddingService, HuggingFaceEmbeddingService>();
+        services.AddScoped<IVectorDatabaseService, QdrantVectorDatabaseService>();
+        services.AddScoped<IGiftSuggestionAiService, GiftSuggestionAIService>();
+        services.AddScoped<HuggingFaceChatService>();
+        
+        // Register mock scraping services (temporary implementation)
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "Shopee"));
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "eBay"));
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "GoogleSearch"));
+        
         return services;
     }
 }
