@@ -14,19 +14,19 @@ public class CreateProductCommandHandler(IDbContext context)
     public async Task<Result> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
-            return Result.Failure<Guid>(ProductErrors.NameRequired);
+            return Result.Failure(ProductErrors.NameRequired);
 
         // Validate Brand
         var brandExists = await context.Brands
             .AnyAsync(b => b.Id == request.BrandId, cancellationToken);
         if (!brandExists)
-            return Result.Failure<Guid>(ProductErrors.BrandNotFound);
+            return Result.Failure(ProductErrors.BrandNotFound);
 
         // Validate Category
         var categoryExists = await context.Categories
             .AnyAsync(c => c.Id == request.CategoryId, cancellationToken);
         if (!categoryExists)
-            return Result.Failure<Guid>(ProductErrors.CategoryNotFound);
+            return Result.Failure(ProductErrors.CategoryNotFound);
 
         // Validate Occasion 
         if (request.OccasionId.HasValue)
@@ -34,18 +34,18 @@ public class CreateProductCommandHandler(IDbContext context)
             var occasionExists = await context.Occasions
                 .AnyAsync(o => o.Id == request.OccasionId.Value, cancellationToken);
             if (!occasionExists)
-                return Result.Failure<Guid>(ProductErrors.OccasionNotFound);
+                return Result.Failure(ProductErrors.OccasionNotFound);
         }
 
         // Validate ProductSources
         if (request.ProductSources == null || !request.ProductSources.Any())
         {
-            return Result.Failure<Guid>(ProductErrors.InvalidProductSource);
+            return Result.Failure(ProductErrors.InvalidProductSource);
         }
 
         if (request.ProductSources.Any(ps => string.IsNullOrWhiteSpace(ps.VendorName) || ps.Price <= 0 || string.IsNullOrWhiteSpace(ps.AffiliateLink)))
         {
-            return Result.Failure<Guid>(ProductErrors.InvalidProductSource);
+            return Result.Failure(ProductErrors.InvalidProductSource);
         }
         
         var product = new Product
