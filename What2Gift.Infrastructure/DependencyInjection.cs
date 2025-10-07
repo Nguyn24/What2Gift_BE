@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Abstraction.Data;
 using What2Gift.Application.Abstraction.AI;
+using What2Gift.Application.Abstraction.AIService.AI;
 using What2Gift.Application.Abstraction.Scraping;
 using What2Gift.Infrastructure.Authentication;
 using What2Gift.Infrastructure.Database;
 using What2Gift.Infrastructure.Services;
-using What2Gift.Infrastructure.Services.AI;
 using What2Gift.Infrastructure.Shared;
 
 
@@ -120,6 +121,19 @@ public static class DependencyInjection
         services.AddScoped<IGiftSuggestionAiService, GiftSuggestionAIService>();
         services.AddScoped<HuggingFaceChatService>();
         
+        // Register mock scraping services (temporary implementation)
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "Shopee"));
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "eBay"));
+        services.AddScoped<IEcommerceScrapingService>(provider => 
+            new MockEcommerceScrapingService(
+                provider.GetRequiredService<ILogger<MockEcommerceScrapingService>>(), 
+                "GoogleSearch"));
         
         return services;
     }

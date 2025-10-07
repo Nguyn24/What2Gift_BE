@@ -9,7 +9,6 @@ using What2Gift.Application.Authentication.Login.LoginWithGoogle;
 using What2Gift.Application.Authentication.Register;
 using What2Gift.Application.Authentication.VerifyUser;
 
-// using BloodDonation.Application.Users.ResetPassword;
 
 namespace What2Gift.Apis.Controller;
 

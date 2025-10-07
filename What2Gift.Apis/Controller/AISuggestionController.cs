@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using What2Gift.Apis.Extensions;
 using What2Gift.Application.Products.AISuggestion;
-        using What2Gift.Domain.Products;
+using What2Gift.Domain.Products;
 
 namespace What2Gift.Apis.Controller;
 
@@ -39,4 +39,5 @@ public class AiSuggestionController(ISender sender) : ControllerBase
         decimal BudgetMin,
         decimal BudgetMax
     );
+    
 }

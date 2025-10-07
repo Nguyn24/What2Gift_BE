@@ -18,6 +18,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
       <PackageReference Include="Serilog" Version="4.3.0" />
@@ -29,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Abstraction\AIService\" />
       <Folder Include="Authentication\" />
       <Folder Include="Products\SearchProducts\" />
       <Folder Include="Users\" />

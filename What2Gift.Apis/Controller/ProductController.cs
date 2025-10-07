@@ -6,10 +6,7 @@ using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Products.CreateProduct;
 using What2Gift.Application.Products.DeleteProduct;
 using What2Gift.Application.Products.GetAllProduct;
-using What2Gift.Application.Products.SearchProducts.SearchProductByBrand;
-using What2Gift.Application.Products.SearchProducts.SearchProductByBudget;
-using What2Gift.Application.Products.SearchProducts.SearchProductByCategory;
-using What2Gift.Application.Products.SearchProducts.SearchProductByOccasion;
+using What2Gift.Application.Products.SearchProducts.SearchProduct;
 using What2Gift.Application.Products.UpdateProduct;
 using What2Gift.Application.Users.GetAllUser;
 using What2Gift.Domain.Common;
@@ -69,52 +66,24 @@ public class ProductController : ControllerBase
     }
     
     // [Authorize(Roles = "Staff")]
-    [HttpGet("search-product-brand")]
-    public async Task<IResult> SearchProductBrand([FromQuery] Guid brandId, [FromQuery] int pageNumber, [FromQuery] int pageSize, CancellationToken cancellation)
+    [HttpGet("search-product")]
+    public async Task<IResult> SearchProduct(
+        [FromQuery] Guid? brandId,
+        [FromQuery] Guid? categoryId,
+        [FromQuery] Guid? occasionId,
+        [FromQuery] decimal? minPrice,
+        [FromQuery] decimal? maxPrice,
+        [FromQuery] int pageNumber,
+        [FromQuery] int pageSize,
+        CancellationToken cancellation)
     {
-        Result<Page<GetProductResponse>> result = await _mediator.Send(new GetProductByBrandQuery
+        Result<Page<GetProductResponse>> result = await _mediator.Send(new SearchProductQuery
         {
             BrandId = brandId,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-        }, cancellation);
-        return result.MatchOk();
-    }
-    
-    // [Authorize(Roles = "Staff")]
-    [HttpGet("search-product-category")]
-    public async Task<IResult> SearchProductCategory([FromQuery] Guid cateId, [FromQuery] int pageNumber, [FromQuery] int pageSize, CancellationToken cancellation)
-    {
-        Result<Page<GetProductResponse>> result = await _mediator.Send(new GetProductByCategoryQuery
-        {
-            CategoryId = cateId,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-        }, cancellation);
-        return result.MatchOk();
-    }
-    
-    // [Authorize(Roles = "Staff")]
-    [HttpGet("search-product-occasion")]
-    public async Task<IResult> SearchProductOccasion([FromQuery] Guid ocaId, [FromQuery] int pageNumber, [FromQuery] int pageSize, CancellationToken cancellation)
-    {
-        Result<Page<GetProductResponse>> result = await _mediator.Send(new GetProductByOccasionQuery
-        {
-            OccasionId = ocaId,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-        }, cancellation);
-        return result.MatchOk();
-    }
-    
-    // [Authorize(Roles = "Staff")]
-    [HttpGet("search-product-budget")]
-    public async Task<IResult> SearchProductBudget([FromQuery] decimal min, [FromQuery] decimal max, [FromQuery] int pageNumber, [FromQuery] int pageSize, CancellationToken cancellation)
-    {
-        Result<Page<GetProductResponse>> result = await _mediator.Send(new GetProductByBudgetQuery
-        {
-            MinPrice = min,
-            MaxPrice = max,
+            CategoryId = categoryId,
+            OccasionId = occasionId,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice,
             PageNumber = pageNumber,
             PageSize = pageSize,
         }, cancellation);
