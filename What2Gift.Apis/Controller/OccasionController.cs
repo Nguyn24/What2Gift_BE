@@ -27,7 +27,6 @@ public class OccasionController : ControllerBase
         var command = new CreateOccasionCommand
         {
             Name = request.Name,
-            Description = request.Description,
             StartMonth = request.StartMonth,
             StartDay = request.StartDay,
             EndMonth = request.EndMonth,
@@ -56,7 +55,6 @@ public class OccasionController : ControllerBase
         {
             Id = request.Id,
             Name = request.Name,
-            Description = request.Description,
             StartMonth = request.StartMonth,
             StartDay = request.StartDay,
             EndMonth = request.EndMonth,

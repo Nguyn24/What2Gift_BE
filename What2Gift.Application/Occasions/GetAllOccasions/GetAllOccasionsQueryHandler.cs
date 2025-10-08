@@ -19,7 +19,6 @@ public class GetAllOccasionsQueryHandler(IDbContext context) : IQueryHandler<Get
             {
                 Id = o.Id,
                 Name = o.Name,
-                Description = o.Description,
                 StartMonth = o.StartMonth,
                 StartDay = o.StartDay,
                 EndMonth = o.EndMonth,

@@ -19,7 +19,6 @@ public class UpdateOccasionCommandHandler(IDbContext context) : ICommandHandler<
         }
 
         occasion.Name = request.Name;
-        occasion.Description = request.Description;
         occasion.StartMonth = request.StartMonth;
         occasion.StartDay = request.StartDay;
         occasion.EndMonth = request.EndMonth;

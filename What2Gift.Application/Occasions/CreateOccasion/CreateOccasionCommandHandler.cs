@@ -13,7 +13,6 @@ public class CreateOccasionCommandHandler(IDbContext context) : ICommandHandler<
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            Description = request.Description,
             StartMonth = request.StartMonth,
             StartDay = request.StartDay,
             EndMonth = request.EndMonth,

@@ -19,7 +19,6 @@ public class UpdateCategoryCommandHandler(IDbContext context) : ICommandHandler<
         }
 
         category.Name = request.Name;
-        category.Description = request.Description;
 
         await context.SaveChangesAsync(cancellationToken);
 

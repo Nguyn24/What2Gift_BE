@@ -7,7 +7,6 @@ public class UpdateOccasionCommand : ICommand
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;
-    public string? Description { get; init; }
     public int StartMonth { get; init; }
     public int StartDay { get; init; }
     public int EndMonth { get; init; }

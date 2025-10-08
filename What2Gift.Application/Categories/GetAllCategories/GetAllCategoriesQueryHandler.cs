@@ -18,8 +18,7 @@ public class GetAllCategoriesQueryHandler(IDbContext context) : IQueryHandler<Ge
             .Select(c => new CategoryResponse
             {
                 Id = c.Id,
-                Name = c.Name,
-                Description = c.Description
+                Name = c.Name
             })
             .ToListAsync(cancellationToken);
 
