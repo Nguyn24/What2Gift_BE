@@ -12,8 +12,7 @@ public class CreateBrandCommandHandler(IDbContext context) : ICommandHandler<Cre
         var brand = new Brand
         {
             Id = Guid.NewGuid(),
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         context.Brands.Add(brand);

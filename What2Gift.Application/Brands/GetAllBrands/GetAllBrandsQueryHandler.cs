@@ -18,8 +18,7 @@ public class GetAllBrandsQueryHandler(IDbContext context) : IQueryHandler<GetAll
             .Select(b => new BrandResponse
             {
                 Id = b.Id,
-                Name = b.Name,
-                Description = b.Description
+                Name = b.Name
             })
             .ToListAsync(cancellationToken);
 

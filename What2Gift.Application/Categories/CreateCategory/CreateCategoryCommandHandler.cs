@@ -12,8 +12,7 @@ public class CreateCategoryCommandHandler(IDbContext context) : ICommandHandler<
         var category = new Category
         {
             Id = Guid.NewGuid(),
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         context.Categories.Add(category);

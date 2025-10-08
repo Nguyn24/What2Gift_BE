@@ -26,8 +26,7 @@ public class CategoryController : ControllerBase
     {
         var command = new CreateCategoryCommand
         {
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         Result result = await _mediator.Send(command, cancellationToken);
@@ -51,8 +50,7 @@ public class CategoryController : ControllerBase
         var command = new UpdateCategoryCommand
         {
             Id = request.Id,
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         Result result = await _mediator.Send(command, cancellationToken);

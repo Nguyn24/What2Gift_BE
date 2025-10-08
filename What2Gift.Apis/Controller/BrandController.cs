@@ -26,8 +26,7 @@ public class BrandController : ControllerBase
     {
         var command = new CreateBrandCommand
         {
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         Result result = await _mediator.Send(command, cancellationToken);
@@ -51,8 +50,7 @@ public class BrandController : ControllerBase
         var command = new UpdateBrandCommand
         {
             Id = request.Id,
-            Name = request.Name,
-            Description = request.Description
+            Name = request.Name
         };
 
         Result result = await _mediator.Send(command, cancellationToken);

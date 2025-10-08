@@ -19,7 +19,6 @@ public class UpdateBrandCommandHandler(IDbContext context) : ICommandHandler<Upd
         }
 
         brand.Name = request.Name;
-        brand.Description = request.Description;
 
         await context.SaveChangesAsync(cancellationToken);
 
