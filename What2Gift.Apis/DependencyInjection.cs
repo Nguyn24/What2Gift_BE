@@ -16,10 +16,11 @@ public static class DependencyInjection
         services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalAndProdFE", policy =>
-                policy.WithOrigins("http://localhost:5173", "https://corvus-fe.vercel.app/")
+                policy.WithOrigins("http://localhost:5173", "https://corvus-fe.vercel.app")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowCredentials());
+                    .AllowCredentials()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains());
         });
         return services;
     }
