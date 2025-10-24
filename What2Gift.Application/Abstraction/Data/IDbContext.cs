@@ -23,6 +23,9 @@ public interface IDbContext
     DbSet<Expense> Expenses { get; }
     DbSet<Feedback> Feedbacks { get; }
     DbSet<Notification> Notifications { get; }
+    DbSet<MembershipPlan> MembershipPlans { get; }
+    DbSet<PaymentTransaction> PaymentTransactions { get; }
+
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

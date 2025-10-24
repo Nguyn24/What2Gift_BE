@@ -32,7 +32,7 @@
     <ItemGroup>
       <Folder Include="Authentication\" />
       <Folder Include="Products\SearchProducts\" />
-      <Folder Include="Users\" />
+      <Folder Include="Users\RegisterMembership\" />
     </ItemGroup>
 
 </Project>

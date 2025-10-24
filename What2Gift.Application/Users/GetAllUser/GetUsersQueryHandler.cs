@@ -32,7 +32,6 @@ public sealed class GetUsersQueryHandler(IDbContext context)
                 AvatarUrl = u.AvatarUrl,
                 Membership = u.Membership == null ? null : new Membership
                 {
-                    MembershipType = u.Membership.MembershipType,
                     StartDate = u.Membership.StartDate,
                     EndDate = u.Membership.EndDate
                 }

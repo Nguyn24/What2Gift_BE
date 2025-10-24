@@ -15,7 +15,6 @@ namespace What2Gift.Application.Users.GetCurrentUser
     }
     public class Membership
     {
-        public MembershipType MembershipType { get; set; } 
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
     }
