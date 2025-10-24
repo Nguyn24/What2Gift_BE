@@ -30,7 +30,6 @@ namespace What2Gift.Application.Users.GetCurrentUser
                 AvatarUrl = user.AvatarUrl,
                 Membership = user.Membership == null ? null : new Membership
                 {
-                    MembershipType = user.Membership.MembershipType,
                     StartDate = user.Membership.StartDate,
                     EndDate = user.Membership.EndDate
                 }

@@ -11,12 +11,7 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).IsRequired();
-
-        builder.Property(x => x.MembershipType)
-            .HasConversion<string>() 
-            .HasMaxLength(50)
-            .IsRequired();
-
+        
         builder.Property(x => x.StartDate)
             .IsRequired();
 
@@ -28,5 +23,11 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
             .WithOne(u => u.Membership)
             .HasForeignKey<Membership>(m => m.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(m => m.MembershipPlan)
+            .WithMany()
+            .HasForeignKey(m => m.MembershipPlanId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

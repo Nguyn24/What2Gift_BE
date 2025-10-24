@@ -29,6 +29,9 @@ public sealed class ApplicationDbContext(
     public DbSet<Expense> Expenses => Set<Expense>();
     public DbSet<Feedback> Feedbacks => Set<Feedback>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<MembershipPlan> MembershipPlans => Set<MembershipPlan>();
+    public DbSet<PaymentTransaction> PaymentTransactions => Set<PaymentTransaction>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

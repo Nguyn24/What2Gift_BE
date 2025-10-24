@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using What2Gift.Infrastructure.Database;
@@ -11,9 +12,11 @@ using What2Gift.Infrastructure.Database;
 namespace What2Gift.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251008184057_RemoveDescriptionColumns")]
+    partial class RemoveDescriptionColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,51 +129,6 @@ namespace What2Gift.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IncomeSources", "public");
-                });
-
-            modelBuilder.Entity("What2Gift.Domain.Finance.PaymentTransaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("MembershipPlanId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("PaidAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("Status")
-                        .HasMaxLength(50)
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TransactionCode")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MembershipPlanId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PaymentTransactions", "public");
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Finance.Revenue", b =>
@@ -490,8 +448,10 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
 
-                    b.Property<Guid>("MembershipPlanId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("MembershipType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
@@ -501,52 +461,10 @@ namespace What2Gift.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MembershipPlanId");
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Memberships", "public");
-                });
-
-            modelBuilder.Entity("What2Gift.Domain.Users.MembershipPlan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MembershipPlans", "public");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Description = "Gói Basic: quyền truy cập cơ bản trong 1 tháng",
-                            Name = "Basic",
-                            Price = 20000m
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Description = "Gói Pro: đầy đủ quyền lợi trong 1 tháng",
-                            Name = "Pro",
-                            Price = 40000m
-                        });
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Users.Notification", b =>
@@ -675,24 +593,6 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("What2Gift.Domain.Finance.PaymentTransaction", b =>
-                {
-                    b.HasOne("What2Gift.Domain.Users.MembershipPlan", "MembershipPlan")
-                        .WithMany("PaymentTransactions")
-                        .HasForeignKey("MembershipPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("What2Gift.Domain.Users.User", "User")
-                        .WithMany("PaymentTransactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MembershipPlan");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("What2Gift.Domain.Finance.Revenue", b =>
                 {
                     b.HasOne("What2Gift.Domain.Finance.IncomeSource", "IncomeSource")
@@ -779,19 +679,11 @@ namespace What2Gift.Infrastructure.Migrations
 
             modelBuilder.Entity("What2Gift.Domain.Users.Membership", b =>
                 {
-                    b.HasOne("What2Gift.Domain.Users.MembershipPlan", "MembershipPlan")
-                        .WithMany()
-                        .HasForeignKey("MembershipPlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("What2Gift.Domain.Users.User", "User")
                         .WithOne("Membership")
                         .HasForeignKey("What2Gift.Domain.Users.Membership", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MembershipPlan");
 
                     b.Navigation("User");
                 });
@@ -852,11 +744,6 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Navigation("AffiliateClicks");
                 });
 
-            modelBuilder.Entity("What2Gift.Domain.Users.MembershipPlan", b =>
-                {
-                    b.Navigation("PaymentTransactions");
-                });
-
             modelBuilder.Entity("What2Gift.Domain.Users.User", b =>
                 {
                     b.Navigation("AffiliateClicks");
@@ -868,8 +755,6 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Navigation("Membership");
 
                     b.Navigation("Notifications");
-
-                    b.Navigation("PaymentTransactions");
 
                     b.Navigation("RefreshTokens");
                 });
