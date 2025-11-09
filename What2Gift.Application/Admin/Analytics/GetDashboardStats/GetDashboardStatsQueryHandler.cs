@@ -10,10 +10,18 @@ public class GetDashboardStatsQueryHandler(IDbContext context) : IQueryHandler<G
 {
     public async Task<Result<DashboardStatsResponse>> Handle(GetDashboardStatsQuery request, CancellationToken cancellationToken)
     {
-        var fromDate = request.FromDate ?? DateTime.Now.AddMonths(-12);
-        var toDate = request.ToDate ?? DateTime.Now;
-        var thisMonthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        var today = DateTime.Now.Date;
+        DateTime ToUtc(DateTime dt) => dt.Kind switch
+        {
+            DateTimeKind.Utc => dt,
+            DateTimeKind.Local => dt.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+        };
+
+        var nowUtc = DateTime.UtcNow;
+        var fromDate = request.FromDate.HasValue ? ToUtc(request.FromDate.Value) : nowUtc.AddMonths(-12);
+        var toDate = request.ToDate.HasValue ? ToUtc(request.ToDate.Value) : nowUtc;
+        var thisMonthStart = new DateTime(nowUtc.Year, nowUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        var today = DateTime.SpecifyKind(nowUtc.Date, DateTimeKind.Utc);
 
         // User Stats
         var totalUsers = await context.Users.CountAsync(cancellationToken);
@@ -26,7 +34,7 @@ public class GetDashboardStatsQueryHandler(IDbContext context) : IQueryHandler<G
 
         // Membership Stats
         var totalMemberships = await context.Memberships.CountAsync(cancellationToken);
-        var activeMemberships = await context.Memberships.CountAsync(m => m.EndDate > DateOnly.FromDateTime(DateTime.Now), cancellationToken);
+        var activeMemberships = await context.Memberships.CountAsync(m => m.EndDate > DateOnly.FromDateTime(nowUtc), cancellationToken);
         var expiredMemberships = totalMemberships - activeMemberships;
         var newMembershipsThisMonth = await context.Memberships.CountAsync(m => m.StartDate >= DateOnly.FromDateTime(thisMonthStart), cancellationToken);
         var membershipConversionRate = totalUsers > 0 ? ((double)totalMemberships / totalUsers) * 100 : 0;
@@ -59,17 +67,28 @@ public class GetDashboardStatsQueryHandler(IDbContext context) : IQueryHandler<G
         var averageOrderValue = successfulTransactions > 0 ? successAmount / successfulTransactions : 0;
 
         // Monthly Revenue Chart Data
-        var monthlyRevenues = await context.PaymentTransactions
+        var monthlyRevenueRows = await context.PaymentTransactions
             .Where(pt => pt.Status == PaymentTransactionStatus.Success && pt.PaidAt >= fromDate && pt.PaidAt <= toDate)
-            .GroupBy(pt => new { pt.PaidAt!.Value.Year, pt.PaidAt.Value.Month })
-            .Select(g => new MonthlyRevenue
+            .GroupBy(pt => new { Year = pt.PaidAt!.Value.Year, Month = pt.PaidAt.Value.Month })
+            .Select(g => new
             {
-                Month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                g.Key.Year,
+                g.Key.Month,
                 Revenue = g.Sum(pt => pt.Amount),
                 TransactionCount = g.Count()
             })
-            .OrderBy(mr => mr.Month)
+            .OrderBy(x => x.Year)
+            .ThenBy(x => x.Month)
             .ToListAsync(cancellationToken);
+
+        var monthlyRevenues = monthlyRevenueRows
+            .Select(x => new MonthlyRevenue
+            {
+                Month = $"{x.Year}-{x.Month:D2}",
+                Revenue = x.Revenue,
+                TransactionCount = x.TransactionCount
+            })
+            .ToList();
 
         // Membership Plan Stats
         var membershipPlanStats = await context.MembershipPlans

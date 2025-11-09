@@ -34,23 +34,40 @@ public class VnPayService : IVnPayService
             ["vnp_CurrCode"] = "VND",
             ["vnp_IpAddr"] = clientIp ?? "127.0.0.1",
             ["vnp_Locale"] = "vn",
-            ["vnp_OrderInfo"] = $"Membership Plan Payment - User: {userId} - Plan: {membershipPlanId}",
+            ["vnp_OrderInfo"] = "test",
             ["vnp_OrderType"] = "other",
             ["vnp_ReturnUrl"] = returnUrl,
             ["vnp_TxnRef"] = $"{userId}_{membershipPlanId}_{DateTime.Now:yyyyMMddHHmmss}"
         };
 
-        // Sort parameters
+        // Sort parameters alphabetically
         var sortedParams = vnp_Params.OrderBy(x => x.Key).ToList();
         
-        // Create query string
-        var queryString = string.Join("&", sortedParams.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+        // Create query string for hash calculation (without vnp_SecureHash)
+        // VNPAY yêu cầu format: key=value&key2=value2 (không encode)
+        var queryString = string.Join("&", sortedParams.Select(x => $"{x.Key}={x.Value}"));
         
         // Create secure hash
         var secureHash = CreateSecureHash(queryString);
-        queryString += $"&vnp_SecureHash={secureHash}";
+        
+        // Add secure hash to parameters
+        vnp_Params["vnp_SecureHash"] = secureHash;
+        
+        // Create final query string with secure hash - sort again after adding vnp_SecureHash
+        var finalSortedParams = vnp_Params.OrderBy(x => x.Key).ToList();
+        var finalQueryString = string.Join("&", finalSortedParams.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value).Replace("%20", "+")}"));
 
-        return $"{_vnp_Url}?{queryString}";
+        // Log for debugging (remove in production)
+        Console.WriteLine("=== VNPAY DEBUG INFO ===");
+        Console.WriteLine($"VNPAY Parameters: {string.Join(", ", vnp_Params.Select(x => $"{x.Key}={x.Value}"))}");
+        Console.WriteLine($"VNPAY Query String for Hash: {queryString}");
+        Console.WriteLine($"VNPAY Hash Secret: {_vnp_HashSecret}");
+        Console.WriteLine($"VNPAY Secure Hash: {secureHash}");
+        Console.WriteLine($"VNPAY Final Query String: {finalQueryString}");
+        Console.WriteLine($"VNPAY Final URL: {_vnp_Url}?{finalQueryString}");
+        Console.WriteLine("=== END VNPAY DEBUG ===");
+
+        return $"{_vnp_Url}?{finalQueryString}";
     }
 
     public VnPayResponse ProcessPaymentCallback(Dictionary<string, string> queryParams)

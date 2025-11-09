@@ -23,7 +23,11 @@ public class Program
             .AddInfrastructure(builder.Configuration);
         
         builder.Services
-            .AddControllers()
+            .AddControllers(options =>
+            {
+                // Enable DateOnly query parsing with formats: dd-MM-yyyy and yyyy-MM-dd
+                options.ModelBinderProviders.Insert(0, new ModelBinding.DateOnlyModelBinderProvider());
+            })
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
