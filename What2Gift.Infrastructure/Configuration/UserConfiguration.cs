@@ -72,6 +72,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property(x => x.W2GPoints)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            builder.Property(x => x.TopUpCode)
+                .IsRequired(false);
             
     }
 }

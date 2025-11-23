@@ -31,6 +31,9 @@ public class Program
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                // Add custom DateTime converters for Vietnam timezone (GMT+7) with AM/PM format
+                options.JsonSerializerOptions.Converters.Add(new Extensions.DateTimeJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new Extensions.NullableDateTimeJsonConverter());
             });
         
         var app = builder.Build();
@@ -44,9 +47,19 @@ public class Program
 
         app.UseCors("AllowLocalAndProdFE");
         app.UseRequestContextLogging();
-        app.UseStaticFiles();
         app.UseExceptionHandler();
         app.UseHttpsRedirection();
+        
+        // Static files should be before routing
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            OnPrepareResponse = ctx =>
+            {
+                // Cache static files for 1 year
+                ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000");
+            }
+        });
+        
         app.UseAuthentication();
         app.UseAuthorization();
         app.ApplyMigrations();  // chạy EF Core migration khi khởi động

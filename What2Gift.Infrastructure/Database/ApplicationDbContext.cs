@@ -31,6 +31,8 @@ public sealed class ApplicationDbContext(
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<MembershipPlan> MembershipPlans => Set<MembershipPlan>();
     public DbSet<PaymentTransaction> PaymentTransactions => Set<PaymentTransaction>();
+    public DbSet<TopUpTransaction> TopUpTransactions => Set<TopUpTransaction>();
+    public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

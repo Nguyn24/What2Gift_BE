@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Abstraction.Data;
-using What2Gift.Application.Abstraction.Services;
 using What2Gift.Infrastructure.Authentication;
 using What2Gift.Infrastructure.Database;
 using What2Gift.Infrastructure.Services;
@@ -100,7 +99,6 @@ public static class DependencyInjection
         services.AddScoped<ITemplateRenderer, TemplateRenderer>();
         services.AddScoped<IImageUploader, ImageUploader>();
         services.AddHttpClient<AiSuggestionService>();
-        services.AddScoped<IVnPayService, VnPayService>();
         return services;
     }
 

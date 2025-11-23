@@ -50,11 +50,44 @@ public class GetAllPaymentsQueryHandler(IDbContext context) : IQueryHandler<GetA
             query = query.Where(pt => pt.Amount <= request.MaxAmount.Value);
         }
 
+        // Filter by PaymentType
+        if (!string.IsNullOrEmpty(request.PaymentType))
+        {
+            var paymentTypeUpper = request.PaymentType.ToUpper();
+            query = paymentTypeUpper switch
+            {
+                "TOP_UP" => query.Where(pt => pt.MembershipPlanId == null),
+                "MEMBERSHIP" => query.Where(pt => pt.MembershipPlanId != null),
+                _ => query
+            };
+        }
+
+        // Apply sorting
+        query = request.SortBy?.ToLower() switch
+        {
+            "amount" => request.SortOrder == SortOrder.Ascending 
+                ? query.OrderBy(pt => pt.Amount) 
+                : query.OrderByDescending(pt => pt.Amount),
+            "createdat" => request.SortOrder == SortOrder.Ascending 
+                ? query.OrderBy(pt => pt.CreatedAt) 
+                : query.OrderByDescending(pt => pt.CreatedAt),
+            "status" => request.SortOrder == SortOrder.Ascending 
+                ? query.OrderBy(pt => pt.Status) 
+                : query.OrderByDescending(pt => pt.Status),
+            "paymentmethod" => request.SortOrder == SortOrder.Ascending 
+                ? query.OrderBy(pt => pt.PaymentMethod) 
+                : query.OrderByDescending(pt => pt.PaymentMethod),
+            "paymenttype" => request.SortOrder == SortOrder.Ascending
+                ? query.OrderBy(pt => pt.MembershipPlanId.HasValue ? 1 : 0) // MEMBERSHIP = 1, TOP_UP = 0
+                : query.OrderByDescending(pt => pt.MembershipPlanId.HasValue ? 1 : 0),
+            _ => query.OrderByDescending(pt => pt.CreatedAt)
+        };
+
         var totalCount = await query.CountAsync(cancellationToken);
 
         var result = await query
-            .OrderByDescending(pt => pt.CreatedAt)
-            .ApplyPagination(request.PageNumber, request.PageSize)
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
             .Select(pt => new AdminPaymentResponse
             {
                 Id = pt.Id,
@@ -68,7 +101,8 @@ public class GetAllPaymentsQueryHandler(IDbContext context) : IQueryHandler<GetA
                 TransactionCode = pt.TransactionCode,
                 Status = pt.Status,
                 CreatedAt = pt.CreatedAt,
-                PaidAt = pt.PaidAt
+                PaidAt = pt.PaidAt,
+                PaymentType = pt.MembershipPlanId != null ? "MEMBERSHIP" : "TOP_UP"
             })
             .ToListAsync(cancellationToken);
 
