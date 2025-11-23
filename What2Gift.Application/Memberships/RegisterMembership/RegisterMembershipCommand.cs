@@ -7,11 +7,11 @@ public class RegisterMembershipCommand : ICommand<RegisterMembershipResponse>
 {
     public Guid UserId { get; init; }
     public Guid MembershipPlanId { get; init; }
-    public string ReturnUrl { get; init; } = string.Empty;
 }
 
 public class RegisterMembershipResponse
 {
-    public string PaymentUrl { get; init; } = string.Empty;
-    public Guid PaymentTransactionId { get; init; }
+    public Guid MembershipId { get; init; }
+    public int PointsUsed { get; init; }
+    public int RemainingPoints { get; init; }
 }

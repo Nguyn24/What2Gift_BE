@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using What2Gift.Application.Abstraction.Authentication;
 using What2Gift.Application.Abstraction.Data;
 using What2Gift.Application.Abstraction.Messaging;
+using What2Gift.Application.Users.Helpers;
 using What2Gift.Domain.Common;
 using What2Gift.Domain.Users;
 using What2Gift.Domain.Users.Errors;
@@ -35,6 +36,13 @@ public class CreateUserCommandHandler(
         }
 
         var hashedPassword = passwordHasher.Hash(command.Password);
+        
+        // Generate unique TopUpCode (0-9999) for regular users, null for admin
+        int? topUpCode = null;
+        if (command.Role != UserRole.Admin)
+        {
+            topUpCode = await TopUpCodeGenerator.GenerateUniqueTopUpCodeAsync(context, cancellationToken);
+        }
 
         var user = new User
         {
@@ -46,7 +54,8 @@ public class CreateUserCommandHandler(
             Status = UserStatus.Active,
             IsVerified = false,
             CreatedAt = DateTime.UtcNow,
-            MembershipStatus = MembershipStatus.Inactive
+            MembershipStatus = MembershipStatus.Inactive,
+            TopUpCode = topUpCode
         };
 
         // user.Raise(new UserCreatedDomainEvent(user.UserId));

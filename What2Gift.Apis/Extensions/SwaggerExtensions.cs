@@ -1,4 +1,6 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 
 namespace What2Gift.Apis.Extensions;
@@ -9,6 +11,14 @@ public static class SwaggerExtensions
     {
         services.AddSwaggerGen(o =>
         {
+            // Include XML comments
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                o.IncludeXmlComments(xmlPath);
+            }
+            
             o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
             var securityScheme = new OpenApiSecurityScheme()
@@ -39,6 +49,16 @@ public static class SwaggerExtensions
             };
 
             o.AddSecurityRequirement(securityRequirement);
+
+            // Configure Swagger to handle file uploads
+            o.MapType<IFormFile>(() => new OpenApiSchema
+            {
+                Type = "string",
+                Format = "binary"
+            });
+
+            // Add parameter filter for examples
+            o.ParameterFilter<SwaggerParameterFilter>();
         });
 
         return services;

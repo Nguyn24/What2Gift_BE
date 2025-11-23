@@ -28,6 +28,7 @@ namespace What2Gift.Application.Users.GetCurrentUser
                 Status = user.Status,
                 MembershipStatus = user.MembershipStatus,
                 AvatarUrl = user.AvatarUrl,
+                W2GPoints = user.W2GPoints,
                 Membership = user.Membership == null ? null : new Membership
                 {
                     StartDate = user.Membership.StartDate,

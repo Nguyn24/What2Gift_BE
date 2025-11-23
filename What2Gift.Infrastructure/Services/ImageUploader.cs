@@ -17,12 +17,20 @@ public class ImageUploader : IImageUploader
 
     public async Task<string> UploadImageAsync(Stream fileStream, string fileName, string folderName)
     {
-        // ✅ Fallback nếu WebRootPath null (bị lỗi như log mày gửi)
-        var rootPath = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        // Ensure WebRootPath is set - it should point to wwwroot in output directory
+        var rootPath = _env.WebRootPath;
+        
+        if (string.IsNullOrEmpty(rootPath))
+        {
+            // Fallback: create wwwroot in current directory (output directory)
+            rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        }
 
         var uploadsFolder = Path.Combine(rootPath, folderName);
         if (!Directory.Exists(uploadsFolder))
+        {
             Directory.CreateDirectory(uploadsFolder);
+        }
 
         var uniqueFileName = Guid.NewGuid() + Path.GetExtension(fileName);
         var filePath = Path.Combine(uploadsFolder, uniqueFileName);

@@ -5,7 +5,7 @@ using What2Gift.Domain.Finance;
 
 namespace What2Gift.Application.Admin.Payments.GetAllPayments;
 
-public class GetAllPaymentsQuery : IPageableQuery, IQuery<Page<AdminPaymentResponse>>
+public class GetAllPaymentsQuery : IPageableQuery, ISortableQuery, IQuery<Page<AdminPaymentResponse>>
 {
     public int PageNumber { get; init; }
     public int PageSize { get; init; }
@@ -15,6 +15,9 @@ public class GetAllPaymentsQuery : IPageableQuery, IQuery<Page<AdminPaymentRespo
     public DateTime? CreatedTo { get; init; }
     public decimal? MinAmount { get; init; }
     public decimal? MaxAmount { get; init; }
+    public string? PaymentType { get; init; } // "TOP_UP" or "MEMBERSHIP" or null (all)
+    public string? SortBy { get; init; }
+    public SortOrder SortOrder { get; init; } = SortOrder.Descending;
 }
 
 public class AdminPaymentResponse
@@ -33,4 +36,5 @@ public class AdminPaymentResponse
     public DateTime? PaidAt { get; init; }
     public string? TransactionNo { get; init; }
     public string? BankCode { get; init; }
+    public string PaymentType { get; init; } = string.Empty; // "TOP_UP" or "MEMBERSHIP"
 }

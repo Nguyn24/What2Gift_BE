@@ -82,6 +82,44 @@ namespace What2Gift.Infrastructure.Migrations
                     b.ToTable("EmailTemplate", "public");
                 });
 
+            modelBuilder.Entity("What2Gift.Domain.Finance.BankAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AccountHolderName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("QrCodeUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BankAccounts", "public");
+                });
+
             modelBuilder.Entity("What2Gift.Domain.Finance.Expense", b =>
                 {
                     b.Property<Guid>("Id")
@@ -197,6 +235,54 @@ namespace What2Gift.Infrastructure.Migrations
                     b.HasIndex("IncomeSourceId");
 
                     b.ToTable("Revenues", "public");
+                });
+
+            modelBuilder.Entity("What2Gift.Domain.Finance.TopUpTransaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ApprovedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("TransferContent")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedBy");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TopUpTransactions", "public");
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.Brand", b =>
@@ -647,10 +733,18 @@ namespace What2Gift.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<int?>("TopUpCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("W2GPoints")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -702,6 +796,24 @@ namespace What2Gift.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("IncomeSource");
+                });
+
+            modelBuilder.Entity("What2Gift.Domain.Finance.TopUpTransaction", b =>
+                {
+                    b.HasOne("What2Gift.Domain.Users.User", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApprovedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("What2Gift.Domain.Users.User", "User")
+                        .WithMany("TopUpTransactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("What2Gift.Domain.Products.GiftSuggestion", b =>
@@ -872,6 +984,8 @@ namespace What2Gift.Infrastructure.Migrations
                     b.Navigation("PaymentTransactions");
 
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("TopUpTransactions");
                 });
 #pragma warning restore 612, 618
         }

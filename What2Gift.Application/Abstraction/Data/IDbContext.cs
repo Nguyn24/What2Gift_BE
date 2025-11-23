@@ -25,6 +25,8 @@ public interface IDbContext
     DbSet<Notification> Notifications { get; }
     DbSet<MembershipPlan> MembershipPlans { get; }
     DbSet<PaymentTransaction> PaymentTransactions { get; }
+    DbSet<TopUpTransaction> TopUpTransactions { get; }
+    DbSet<BankAccount> BankAccounts { get; }
 
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
